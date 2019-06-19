@@ -66,7 +66,7 @@ namespace V.Udodov.Json.Tests
             Action action = () => { new EntityMock {ExtensionDataJsonSchema = schema}; };
 
             action
-                .Should().Throw<ArgumentException>()
+                .Should().Throw<JsonSchemaValidationException>()
                 .And.Message.Should().Contain("Collisions: name");
         }
 

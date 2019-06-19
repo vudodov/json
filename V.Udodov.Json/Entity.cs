@@ -52,7 +52,7 @@ namespace V.Udodov.Json
                     var collisions = GetType().GetProperties().Select(p => p.Name.ToLowerInvariant())
                         .Intersect(value.Properties.Select(jp => jp.Key.ToLowerInvariant()));
 
-                    throw new JsonSchemaException(
+                    throw new JsonSchemaValidationException(
                         "JSON Schema for extension data can't contain declarations for properties which exist in the class declaration. " +
                         $"Collisions: {string.Join(", ", collisions)}");
                 }
