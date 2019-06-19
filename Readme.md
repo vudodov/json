@@ -13,7 +13,7 @@ This library also heavily use [Newtonsoft](https://newtonsoft.com)
 
 ### Usage
 
-```
+```c#
 class FlexibleEntity : V.Udodov.Json.Entity
 {
   ...
@@ -22,15 +22,15 @@ class FlexibleEntity : V.Udodov.Json.Entity
 JSchema flexibleJsonSchema = JSchema.Parse(@"{
     'type': 'object',
     'properties': {
-      'role': {'type': 'string', 'enum': ['accountant']}
+      'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
     }
   }");
 
 FlexibleEntity entity = new FlexibleEntity { ExtensionDataJsonSchema = flexibleJsonSchema };
 
-entity["role"] = "not accountant"; // throws a JsonValidationException
-entity["role"] = "accountant";
-Console.WriteLine(entity["role"]); // prints "accountant"
+entity["shoe_size"] = 20; // throws a JsonEntityValidationException
+entity["shoe_size"] = 8.5;
+Console.WriteLine(entity["shoe_size"]); // prints "accountant"
 
 Console.WriteLine(entity.JsonSchema); // will return full JSON Schema of an object. Extensible and static parts
 
@@ -40,7 +40,7 @@ And will result in exception if JSON Schema will try to override property of the
 Meaning the Json Schema must contain only declaration for extension data. 
 There should be no collisions in class and extensible data declarations.
 
-```
+```c#
 class FlexibleEntity : V.Udodov.Json.Entity
 {
   public string Name { get; set; }
@@ -56,6 +56,19 @@ Schema flexibleJsonSchema = JSchema.Parse(@"{
 
 // Code below throws ArgumentException because both class and JSON Schema declarations
 // have declaration for name property.
-FlexibleEntity entity = new FlexibleEntity{ ExtensionDataJsonSchema = flexibleJsonSchema };
+FlexibleEntity entity = new FlexibleEntity { ExtensionDataJsonSchema = flexibleJsonSchema };
 
+```
+No schema- no problems. Use your object as extensible flexible entity.
+```c#
+class FlexibleEntity : V.Udodov.Json.Entity
+{
+  public string Name { get; set; }
+  ...
+}
+
+FlexibleEntity entity = new FlexibleEntity();
+entity["latitude"] = 23;
+entity["longitude"] = 11;
+entity["shoe_size"] = 8;
 ```
