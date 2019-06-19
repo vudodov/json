@@ -11,7 +11,11 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 before_build:
-  - cmd: nuget restore
+  - ps: dotnet restore
+after_build:
+  - ps: dotnet pack -o .\Artifacts
+artifacts:
+  - path: .\Artifacts\*.nupkg
 build:
   publish_nuget: true
   verbosity: minimal
