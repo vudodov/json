@@ -1,6 +1,6 @@
 # Flexible objects with JSON and JSON Schema
 
-Flexible Data implementation which is combination of JSON and JSON Schema working together in dot net world.
+Flexible Data implementation which will help you extend your strongly typed classes with additional data and validate it against configured JSON Schema.
 
 ## Getting Started
 
