@@ -48,7 +48,7 @@ namespace V.Udodov.Json.Tests
             Action action = () => entityMock["role"] = "not accountant";
 
             action
-                .Should().Throw<JsonValidationException>()
+                .Should().Throw<JsonEntityValidationException>()
                 .And.Errors
                 .Should().HaveCount(1);
         }

@@ -5,9 +5,9 @@ using Newtonsoft.Json.Schema;
 
 namespace V.Udodov.Json
 {
-    public class JsonValidationException : JsonException
+    public class JsonEntityValidationException : JsonException
     {
-        public JsonValidationException(string message, IEnumerable<ValidationError> errors): base(message)
+        public JsonEntityValidationException(string message, IEnumerable<ValidationError> errors): base(message)
         {
             Errors = errors;
         }

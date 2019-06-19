@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -15,6 +14,9 @@ namespace V.Udodov.Json
 
         [JsonExtensionData] private readonly IDictionary<string, JToken> _data = new Dictionary<string, JToken>();
 
+        /// <summary>
+        /// Get Full JSON Schema including class properties and configured flexible data schema.
+        /// </summary>
         [JsonIgnore]
         public JSchema JsonSchema
         {
@@ -32,6 +34,10 @@ namespace V.Udodov.Json
             }
         }
 
+        /// <summary>
+        /// A setup point for JSON Schema for extension data.
+        /// </summary>
+        /// <exception cref="JsonSchemaException"></exception>
         [JsonIgnore]
         public JSchema ExtensionDataJsonSchema
         {
@@ -46,10 +52,9 @@ namespace V.Udodov.Json
                     var collisions = GetType().GetProperties().Select(p => p.Name.ToLowerInvariant())
                         .Intersect(value.Properties.Select(jp => jp.Key.ToLowerInvariant()));
 
-                    throw new ArgumentException(
+                    throw new JsonSchemaException(
                         "JSON Schema for extension data can't contain declarations for properties which exist in the class declaration. " +
-                        $"Collisions: {string.Join(", ", collisions)}",
-                        "extensionDataJsonSchema");
+                        $"Collisions: {string.Join(", ", collisions)}");
                 }
 
                 _extensionDataJsonSchema = value;
@@ -96,7 +101,7 @@ namespace V.Udodov.Json
                 obj.Add(key, token);
 
                 if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
-                    throw new JsonValidationException(
+                    throw new JsonEntityValidationException(
                         $"Validation for value {value} failed against JSON schema {_extensionDataJsonSchema}.",
                         errors);
             }
