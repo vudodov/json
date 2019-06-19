@@ -9,15 +9,11 @@ namespace V.Udodov.Json.Tests
     {
         private class EntityMock : Entity
         {
-            public EntityMock(JSchema jSchema) : base(jSchema)
-            {
-            }
-
             public string Name { get; set; }
         }
 
         [Fact]
-        public void WhenSettingEntityFlexibleDataItShouldSetItIfDataIsValid()
+        public void WhenSettingEntityFlexibleDataWithSchemaItShouldSetItIfDataIsValid()
         {
             var schema = JSchema.Parse(@"{
               'type': 'object',
@@ -26,13 +22,17 @@ namespace V.Udodov.Json.Tests
               }
             }");
 
-            var entityMock = new EntityMock(schema) {["role"] = "accountant"};
+            var entityMock = new EntityMock
+            {
+                ExtensionDataJsonSchema = schema,
+                ["role"] = "accountant"
+            };
 
             entityMock["role"].Should().Be("accountant");
         }
 
         [Fact]
-        public void WhenSettingEntityFlexibleDataItShouldThrowIfDataIsInvalid()
+        public void WhenSettingEntityFlexibleDataWithSchemaItShouldThrowIfDataIsInvalid()
         {
             var schema = JSchema.Parse(@"{
               'type': 'object',
@@ -41,11 +41,14 @@ namespace V.Udodov.Json.Tests
               }
             }");
 
-            var entityMock = new EntityMock(schema);
+            var entityMock = new EntityMock
+            {
+                ExtensionDataJsonSchema = schema
+            };
             Action action = () => entityMock["role"] = "not accountant";
 
             action
-                .Should().Throw<JsonValidationException>()
+                .Should().Throw<JsonEntityValidationException>()
                 .And.Errors
                 .Should().HaveCount(1);
         }
@@ -60,10 +63,10 @@ namespace V.Udodov.Json.Tests
               }
             }");
 
-            Action action = () => { new EntityMock(schema); };
+            Action action = () => { new EntityMock {ExtensionDataJsonSchema = schema}; };
 
             action
-                .Should().Throw<ArgumentException>()
+                .Should().Throw<JsonSchemaValidationException>()
                 .And.Message.Should().Contain("Collisions: name");
         }
 
@@ -77,10 +80,10 @@ namespace V.Udodov.Json.Tests
               }
             }");
 
-            var entityMock = new EntityMock(schema);
+            var entityMock = new EntityMock {ExtensionDataJsonSchema = schema};
 
             entityMock.JsonSchema.ToString().Should().Be(JSchema.Parse(@"{
-            '$id': 'Pageup.Json.Test.EntityTest+EntityMock',
+            '$id': 'V.Udodov.Json.Tests.EntityTests+EntityMock',
             'type': 'object',
             'properties': {
                 'name': {
@@ -100,6 +103,17 @@ namespace V.Udodov.Json.Tests
                 'name'
                 ]
             }").ToString());
+        }
+
+        [Fact]
+        public void WhenSettingEntityFlexibleDataWithoutSchemaItShouldSetIt()
+        {
+            var entityMock = new EntityMock
+            {
+                ["role"] = "accountant"
+            };
+
+            entityMock["role"].Should().Be("accountant");
         }
     }
 }

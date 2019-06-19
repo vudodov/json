@@ -4,6 +4,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V.Udodov.Json", "V.Udodov.J
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V.Udodov.Json.Tests", "V.Udodov.Json.Tests\V.Udodov.Json.Tests.csproj", "{C287638F-D74F-4BC7-9317-9BB726FBE133}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{F883E96B-614F-4C8B-B9B0-EEB375706031}"
+ProjectSection(SolutionItems) = preProject
+	Readme.md = Readme.md
+	.travis.yml = .travis.yml
+	.gitignore = .gitignore
+	_config.yml = _config.yml
+	appveyor.yml = appveyor.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -18,4 +18,8 @@
       <ProjectReference Include="..\V.Udodov.Json\V.Udodov.Json.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="ParcelCheckpointTests.cs" />
+    </ItemGroup>
+
 </Project>

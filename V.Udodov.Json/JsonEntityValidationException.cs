@@ -5,9 +5,12 @@ using Newtonsoft.Json.Schema;
 
 namespace V.Udodov.Json
 {
-    public class JsonValidationException : JsonException
+    /// <summary>
+    /// The exception is throw when extension data is invalid against configured JSON Schema
+    /// </summary>
+    public class JsonEntityValidationException : JsonException
     {
-        public JsonValidationException(string message, IEnumerable<ValidationError> errors): base(message)
+        public JsonEntityValidationException(string message, IEnumerable<ValidationError> errors): base(message)
         {
             Errors = errors;
         }

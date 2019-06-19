@@ -1,0 +1,32 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+skip_tags: true
+configuration: Release
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+before_build:
+  - cmd: nuget restore
+build:
+  publish_nuget: true
+  verbosity: minimal
+deploy:
+  - provider: GitHub
+    tag: v$(appveyor_build_version)
+    release: v$(appveyor_build_version)
+    auth_token:
+      secure: p4Sb4fvtKbUHPv81TBNDCG9ILXAw9IiBmbcgvwa3Q2FQnKTYMkyMcDjmsbqAaJLC
+    repository: vudodov/json
+    artifact: /.*\.nupkg/
+    on:
+      branch: master
+  - provider: NuGet
+    api_key:
+      secure: /p1mWrn3DStJKFMaRB+vlHAWzx7XX0N7nuvVWSPLA1JR+G9X70yWWCmFqbiBjR+P
+    on:
+      branch: master
