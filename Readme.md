@@ -3,6 +3,8 @@
 Having a dilemma what to choose *Flexible and Extendable JSON* or *Strongly Typed Class*? Take advantage of both. 
 Extendable Data implementation which will help you extend your strongly typed classes with additional data which could be validated against configured JSON Schema.
 
+[![Build Status](https://travis-ci.org/vudodov/json.svg?branch=master)](https://travis-ci.org/vudodov/json)
+
 ## Getting Started
 
 Get yourself familiar with JSON Schema before using it. [JSON Schema official documentation](https://json-schema.org/).
