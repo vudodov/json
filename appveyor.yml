@@ -16,7 +16,7 @@ build:
   publish_nuget: true
   verbosity: minimal
 after_build:
-  - cmd: dotnet pack -o .\Artifacts -p:PackageVersion=$(appveyor_build_version)
+  - cmd: dotnet pack  -o .\Artifacts -p:PackageVersion=$(appveyor_build_version)
 artifacts:
   - path: '**\Artifacts\*.nupkg'
 deploy:
