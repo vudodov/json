@@ -10,7 +10,6 @@ ProjectSection(SolutionItems) = preProject
 	.travis.yml = .travis.yml
 	.gitignore = .gitignore
 	_config.yml = _config.yml
-	V.Udodov.Json.1.0.0.nupkg = V.Udodov.Json.1.0.0.nupkg
 	appveyor.yml = appveyor.yml
 EndProjectSection
 EndProject
