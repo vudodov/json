@@ -3,7 +3,8 @@
 Having a dilemma what to choose *Flexible and Extendable JSON* or *Strongly Typed Class*? Take advantage of both. 
 Extendable Data implementation which will help you extend your strongly typed classes with additional data which could be validated against configured JSON Schema.
 
-[![Build Status](https://travis-ci.org/vudodov/json.svg?branch=master)](https://travis-ci.org/vudodov/json)
+[![Build Status](https://travis-ci.org/vudodov/json.svg?branch=master)](https://travis-ci.org/vudodov/json) [![Build status](https://ci.appveyor.com/api/projects/status/bi163kqk0vgqd692?svg=true)](https://ci.appveyor.com/project/vudodov/json) ![Nuget](https://img.shields.io/nuget/v/v.udodov.json.svg)
+
 
 ## Getting Started
 
