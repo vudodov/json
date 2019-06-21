@@ -61,6 +61,13 @@ namespace V.Udodov.Json
             }
         }
 
+        public override string ToString() => JsonConvert.SerializeObject(this,
+            new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(), 
+                    Formatting = Formatting.Indented
+                });
+
         public object this[string key]
         {
             get => Get(key);

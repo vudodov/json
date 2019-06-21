@@ -8,8 +8,8 @@ Extendable Data implementation which will help you extend your strongly typed cl
 
 ## Getting Started
 
-Get yourself familiar with JSON Schema before using it. [JSON Schema official documentation](https://json-schema.org/).
-This library also heavily use [Newtonsoft](https://newtonsoft.com)
+Get yourself familiar with [JSON Schema](https://json-schema.org/).
+Special thanks to [Newtonsoft](https://newtonsoft.com).
 
 ### Usage
 
@@ -19,22 +19,33 @@ class FlexibleEntity : V.Udodov.Json.Entity
   ...
 }
 
+...
+
 JSchema flexibleJsonSchema = JSchema.Parse(@"{
     'type': 'object',
     'properties': {
-      'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
+      'shoe_size': { 
+        'type': 'number', 
+        'minimum': 5, 
+        'maximum': 12, 
+        'multipleOf': 1.0 
+      }
     }
   }");
 
-FlexibleEntity entity = new FlexibleEntity { ExtensionDataJsonSchema = flexibleJsonSchema };
+FlexibleEntity entity = new FlexibleEntity 
+{ 
+    ExtensionDataJsonSchema = flexibleJsonSchema 
+};
 
 entity["shoe_size"] = 20; // throws a JsonEntityValidationException
 entity["shoe_size"] = 8.5;
-Console.WriteLine(entity["shoe_size"]); // prints "accountant"
+Console.WriteLine(entity["shoe_size"]); // prints "8.5"
 
 Console.WriteLine(entity.JsonSchema); // will return full JSON Schema of an object. Extensible and static parts
 
 ```
+
 Built in protection prevents JSON Schema taking over control of your class properties definition. 
 And will result in exception if JSON Schema will try to override property of the class.
 Meaning the Json Schema must contain only declaration for extension data. 
@@ -47,18 +58,27 @@ class FlexibleEntity : V.Udodov.Json.Entity
   ...
 }
 
+...
+
 Schema flexibleJsonSchema = JSchema.Parse(@"{
     'type': 'object',
     'properties': {
-      'name': {'type': 'string', 'minLength': 3}
+      'name': {
+        'type': 'string', 
+        'minLength': 3
+      }
     }
   }");
 
-// Code below throws ArgumentException because both class and JSON Schema declarations
-// have declaration for name property.
-FlexibleEntity entity = new FlexibleEntity { ExtensionDataJsonSchema = flexibleJsonSchema };
+// Code below throws JsonSchemaValidationException because both class and JSON Schema declarations
+// have name property.
+FlexibleEntity entity = new FlexibleEntity 
+{ 
+    ExtensionDataJsonSchema = flexibleJsonSchema 
+};
 
 ```
+
 No schema- no problems. Use your object as extensible flexible entity.
 ```c#
 class FlexibleEntity : V.Udodov.Json.Entity
@@ -67,8 +87,42 @@ class FlexibleEntity : V.Udodov.Json.Entity
   ...
 }
 
-FlexibleEntity entity = new FlexibleEntity();
-entity["latitude"] = 23;
-entity["longitude"] = 11;
-entity["shoe_size"] = 8;
+...
+
+FlexibleEntity entity = new FlexibleEntity
+{
+  entity["pants_size"] = 49;
+}
+Console.WriteLine(entity["pants_size"]); // prints "49"
+
+entity["middle_name"] = "peanut";
+Console.WriteLine(entity["middle_name"]); // prints "peanut"
+```
+
+Easily get JSON string from your class instance
+```c#
+class FlexibleEntity : V.Udodov.Json.Entity
+{
+  public string Name { get; set; }
+  ...
+}
+
+...
+
+FlexibleEntity entity = new FlexibleEntity
+{
+  Name = "Peter Parker",
+  ["pants_size"] = 49
+};
+
+Console.WriteLine(entity);
+/*
+prints
+
+{
+  name: "Peter Parker",
+  pants_size: 49
+}
+*/
+
 ```
