@@ -21,7 +21,7 @@ class FlexibleEntity : V.Udodov.Json.Entity
 
 ...
 
-JSchema flexibleJsonSchema = JSchema.Parse(@"{
+string flexibleJsonSchema = @"{
     'type': 'object',
     'properties': {
       'shoe_size': { 
@@ -31,7 +31,7 @@ JSchema flexibleJsonSchema = JSchema.Parse(@"{
         'multipleOf': 1.0 
       }
     }
-  }");
+  }";
 
 FlexibleEntity entity = new FlexibleEntity 
 { 
@@ -60,7 +60,7 @@ class FlexibleEntity : V.Udodov.Json.Entity
 
 ...
 
-Schema flexibleJsonSchema = JSchema.Parse(@"{
+string flexibleJsonSchema = @"{
     'type': 'object',
     'properties': {
       'name': {
@@ -68,7 +68,7 @@ Schema flexibleJsonSchema = JSchema.Parse(@"{
         'minLength': 3
       }
     }
-  }");
+  }";
 
 // Code below throws JsonSchemaValidationException because both class and JSON Schema declarations
 // have name property.
