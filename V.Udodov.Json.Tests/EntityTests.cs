@@ -17,12 +17,12 @@ namespace V.Udodov.Json.Tests
         [Fact]
         public void WhenSettingEntityFlexibleDataWithSchemaItShouldSetItIfDataIsValid()
         {
-            var schema = JSchema.Parse(@"{
+            const string schema = @"{
               'type': 'object',
               'properties': {
                 'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
               }
-            }");
+            }";
 
             var entityMock = new EntityMock
             {
@@ -36,12 +36,12 @@ namespace V.Udodov.Json.Tests
         [Fact]
         public void WhenSettingEntityFlexibleDataWithSchemaAndDataIsInvalidItShouldThrow()
         {
-            var schema = JSchema.Parse(@"{
+            const string schema = @"{
               'type': 'object',
               'properties': {
                 'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
               }
-            }");
+            }";
 
             var entityMock = new EntityMock
             {
@@ -58,12 +58,12 @@ namespace V.Udodov.Json.Tests
         [Fact]
         public void WhenConfiguringAnEntityItShouldThrowIfSchemaRedefinesClassProperties()
         {
-            var schema = JSchema.Parse(@"{
+            const string schema = @"{
               'type': 'object',
               'properties': {
                 'name': {'type': 'string', 'minLength': 3}
               }
-            }");
+            }";
 
             Action action = () => { new EntityMock {ExtensionDataJsonSchema = schema}; };
 
@@ -75,36 +75,36 @@ namespace V.Udodov.Json.Tests
         [Fact]
         public void WhenGettingSchemaItShouldReturnFullSchema()
         {
-            var schema = JSchema.Parse(@"{
+            const string schema = @"{
               'type': 'object',
               'properties': {
                 'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
               }
-            }");
+            }";
 
             var entityMock = new EntityMock {ExtensionDataJsonSchema = schema};
 
-            entityMock.JsonSchema.ToString().JsonEquals(@"{
-""$id"": ""V.Udodov.Json.Tests.EntityTests+EntityMock"",
-""type"": ""object"",
-""properties"": {
-    ""name"": {
-        ""type"": [
-            ""string"",
-            ""null""
-                ]
-    },
-    ""shoe_size"": { 
-        ""type"": ""number"", 
-        ""minimum"": 5.0, 
-        ""maximum"": 12.0, 
-        ""multipleOf"": 1.0 
-    }
-},
-""required"": [
-    ""name""
-    ]
-}");
+            entityMock.JsonSchema.JsonEquals(@"{
+                ""$id"": ""V.Udodov.Json.Tests.EntityTests+EntityMock"",
+                ""type"": ""object"",
+                ""properties"": {
+                    ""name"": {
+                        ""type"": [
+                            ""string"",
+                            ""null""
+                                ]
+                    },
+                    ""shoe_size"": { 
+                        ""type"": ""number"", 
+                        ""minimum"": 5.0, 
+                        ""maximum"": 12.0, 
+                        ""multipleOf"": 1.0 
+                    }
+                },
+                ""required"": [
+                    ""name""
+                    ]
+                }");
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace V.Udodov.Json.Tests
         }
 
         [Fact]
-        public void WhenStringifyingEntityItShouldSerializeIt()
+        public void WhenGettingEntityAsAStringItShouldSerializeIt()
         {
             var entityMock = new EntityMock
             {
@@ -136,7 +136,7 @@ namespace V.Udodov.Json.Tests
               ""coffee_preference"": ""cappuccino""
             }");
         }
-        
+
         [Fact]
         public void WhenTryingToGetWrongFlexibleDataEntityItemItShouldThrow()
         {
