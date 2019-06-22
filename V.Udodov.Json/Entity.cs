@@ -10,15 +10,14 @@ namespace V.Udodov.Json
 {
     public class Entity
     {
-        private JSchema _extensionDataJsonSchema;
-
+        [JsonIgnore] private JSchema _extensionDataJsonSchema;
         [JsonExtensionData] private readonly IDictionary<string, JToken> _data = new Dictionary<string, JToken>();
 
         /// <summary>
         /// Get Full JSON Schema including class properties and configured flexible data schema.
         /// </summary>
         [JsonIgnore]
-        public JSchema JsonSchema
+        public string JsonSchema
         {
             get
             {
@@ -30,7 +29,7 @@ namespace V.Udodov.Json
 
                 _extensionDataJsonSchema.Properties.ToList().ForEach(schema.Properties.Add);
 
-                return schema;
+                return schema.ToString();
             }
         }
 
@@ -39,34 +38,36 @@ namespace V.Udodov.Json
         /// </summary>
         /// <exception cref="JsonSchemaException"></exception>
         [JsonIgnore]
-        public JSchema ExtensionDataJsonSchema
+        public string ExtensionDataJsonSchema
         {
             set
             {
+                var schema = JSchema.Parse(value);
+
                 var hasCollisions = GetType().GetProperties().Select(p => p.Name.ToLowerInvariant())
                     .Any(propName =>
-                        value.Properties.Select(jp => jp.Key.ToLowerInvariant()).Contains(propName));
+                        schema.Properties.Select(jp => jp.Key.ToLowerInvariant()).Contains(propName));
 
                 if (hasCollisions)
                 {
                     var collisions = GetType().GetProperties().Select(p => p.Name.ToLowerInvariant())
-                        .Intersect(value.Properties.Select(jp => jp.Key.ToLowerInvariant()));
+                        .Intersect(schema.Properties.Select(jp => jp.Key.ToLowerInvariant()));
 
                     throw new JsonSchemaValidationException(
                         "JSON Schema for extension data can't contain declarations for properties which exist in the class declaration. " +
                         $"Collisions: {string.Join(", ", collisions)}");
                 }
 
-                _extensionDataJsonSchema = value;
+                _extensionDataJsonSchema = schema;
             }
         }
 
         public override string ToString() => JsonConvert.SerializeObject(this,
             new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(), 
-                    Formatting = Formatting.Indented
-                });
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.Indented
+            });
 
         public object this[string key]
         {
