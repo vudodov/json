@@ -113,7 +113,7 @@ namespace V.Udodov.Json
 
                 if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
                     throw new JsonEntityValidationException(
-                        $"Validation for value {value} failed against JSON schema {_extensionDataJsonSchema}.",
+                        $"Validation for value {token} failed against JSON schema {_extensionDataJsonSchema}.",
                         errors);
             }
 
