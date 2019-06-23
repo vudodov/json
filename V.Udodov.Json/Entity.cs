@@ -62,6 +62,9 @@ namespace V.Udodov.Json
             }
         }
 
+        /// <summary>
+        /// JSON representation of an object
+        /// </summary>
         public override string ToString() => JsonConvert.SerializeObject(this,
             new JsonSerializerSettings
             {
@@ -69,6 +72,10 @@ namespace V.Udodov.Json
                 Formatting = Formatting.Indented
             });
 
+        /// <summary>
+        /// Sets and validates extension data property <param name="key" /> against configured JSON Schema.
+        /// Or Gets requested property by <param name="key" />
+        /// </summary>
         public object this[string key]
         {
             get => Get(key);
@@ -105,12 +112,12 @@ namespace V.Udodov.Json
 
             if (_extensionDataJsonSchema != null)
             {
-                var obj = JObject.FromObject(this);
+                var obj = JObject.FromObject(_data);
                 obj.Add(key, token);
 
                 if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
                     throw new JsonEntityValidationException(
-                        $"Validation for value {value} failed against JSON schema {_extensionDataJsonSchema}.",
+                        $"Validation for value {token} failed against JSON schema {_extensionDataJsonSchema}.",
                         errors);
             }
 
