@@ -72,6 +72,10 @@ namespace V.Udodov.Json
                 Formatting = Formatting.Indented
             });
 
+        /// <summary>
+        /// Sets and validates extension data property <param name="key" /> against configured JSON Schema.
+        /// Or Gets requested property by <param name="key" />
+        /// </summary>
         public object this[string key]
         {
             get => Get(key);
