@@ -62,6 +62,9 @@ namespace V.Udodov.Json
             }
         }
 
+        /// <summary>
+        /// JSON representation of an object
+        /// </summary>
         public override string ToString() => JsonConvert.SerializeObject(this,
             new JsonSerializerSettings
             {
@@ -105,7 +108,7 @@ namespace V.Udodov.Json
 
             if (_extensionDataJsonSchema != null)
             {
-                var obj = JObject.FromObject(this);
+                var obj = JObject.FromObject(_data);
                 obj.Add(key, token);
 
                 if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
