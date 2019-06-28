@@ -138,7 +138,7 @@ namespace V.Udodov.Json.Tests
         }
 
         [Fact]
-        public void WhenTryingToGetWrongFlexibleDataEntityItemItShouldThrow()
+        public void WhenTryingToGetWrongFlexibleDataEntityItemThroughIndexerItShouldThrow()
         {
             var entityMock = new EntityMock
             {
@@ -151,6 +151,34 @@ namespace V.Udodov.Json.Tests
             };
 
             action.Should().Throw<KeyNotFoundException>();
+        }
+        
+        [Fact]
+        public void WhenTryingToGetWrongFlexibleDataEntityItemItShouldThrow()
+        {
+            var entityMock = new EntityMock
+            {
+                ["shoe_size"] = 12
+            };
+
+            entityMock.TryGetValue("pants_size", out var result)
+                .Should().BeFalse();
+
+            result.Should().BeNull();
+        }
+        
+        [Fact]
+        public void WhenTryingToGetFlexibleDataEntityItemItShouldThrow()
+        {
+            var entityMock = new EntityMock
+            {
+                ["shoe_size"] = 12
+            };
+
+            entityMock.TryGetValue("shoe_size", out var result)
+                .Should().BeTrue();
+
+            result.Should().Be(12);
         }
     }
 }

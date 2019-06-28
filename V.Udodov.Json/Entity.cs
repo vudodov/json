@@ -84,24 +84,7 @@ namespace V.Udodov.Json
 
         private object Get(string key)
         {
-            object JTokenToObject(JToken source)
-            {
-                switch (source.Type)
-                {
-                    case JTokenType.Object:
-                        return ((JObject) source).Properties()
-                            .ToDictionary(prop => prop.Name, prop => JTokenToObject(prop.Value));
-                    case JTokenType.Array:
-                        return source.Values().Select(JTokenToObject).ToList();
-                    default:
-                        return source.ToObject<object>();
-                }
-            }
-
-            if (_data.TryGetValue(key, out JToken token))
-            {
-                return JTokenToObject(token);
-            }
+            if (TryGetValue(key, out object result)) return result;
 
             throw new KeyNotFoundException($"Key {key} was not found.");
         }
@@ -122,6 +105,32 @@ namespace V.Udodov.Json
             }
 
             _data.Add(key, token);
+        }
+
+        public bool TryGetValue(string key, out object value)
+        {
+            object JTokenToObject(JToken source)
+            {
+                switch (source.Type)
+                {
+                    case JTokenType.Object:
+                        return ((JObject) source).Properties()
+                            .ToDictionary(prop => prop.Name, prop => JTokenToObject(prop.Value));
+                    case JTokenType.Array:
+                        return source.Values().Select(JTokenToObject).ToList();
+                    default:
+                        return source.ToObject<object>();
+                }
+            }
+
+            if (_data.TryGetValue(key, out JToken token))
+            {
+                value = JTokenToObject(token);
+                return true;
+            }
+
+            value = null;
+            return false;
         }
     }
 }
