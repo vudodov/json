@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace V.Udodov.Json
 {
-    public static class JsonSchema
+    public static class TypeExtensions
     {
         /// <summary>
         /// Generates JSON Schema from the type and merges it with JSON Schema provided in <paramref name="jsonSchema"/>.
