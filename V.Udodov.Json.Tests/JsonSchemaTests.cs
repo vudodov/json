@@ -13,16 +13,18 @@ namespace V.Udodov.Json.Tests
         public void WhenGeneratingJsonSchemaFromTypeAndStringItShouldGenerate()
         {
             const string schema = @"{
+              'version': 12,
               'type': 'object',
               'properties': {
                 'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
               }
             }";
 
-            var result = typeof(TheMock).Merge(schema);
+            var result = typeof(TheMock).MergeLeft(schema);
 
             result.JsonEquals(@"{
                 ""$id"": ""V.Udodov.Json.Tests.JsonSchemaTests+TheMock"",
+                ""version"": 12,
                 ""type"": ""object"",
                 ""properties"": {
                     ""mockProp"": {
@@ -49,7 +51,7 @@ namespace V.Udodov.Json.Tests
         {
             const string schema = null;
 
-            var result = typeof(TheMock).Merge(schema);
+            var result = typeof(TheMock).MergeLeft(schema);
 
             result.JsonEquals(@"{
                 ""$id"": ""V.Udodov.Json.Tests.JsonSchemaTests+TheMock"",
