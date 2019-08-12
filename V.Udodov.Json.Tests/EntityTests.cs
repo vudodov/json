@@ -27,10 +27,10 @@ namespace V.Udodov.Json.Tests
             var entityMock = new EntityMock
             {
                 ExtensionDataJsonSchema = schema,
-                ["role"] = 10
+                ["shoe_size"] = 10
             };
 
-            entityMock["role"].Should().Be(10);
+            entityMock["shoe_size"].Should().Be(10);
         }
 
         [Fact]
@@ -53,6 +53,29 @@ namespace V.Udodov.Json.Tests
                 .Should().Throw<JsonEntityValidationException>()
                 .And.Errors
                 .Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void WhenUpdatingFlexibleDataItShouldUpdateWithoutErrors()
+        {
+            const string schema = @"{
+              'type': 'object',
+              'properties': {
+                'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
+              }
+            }";
+
+            var entityMock = new EntityMock
+            {
+                ExtensionDataJsonSchema = schema,
+                ["shoe_size"] = 10
+            };
+
+            Action action = () => entityMock["shoe_size"] = 8;
+
+            action.Should().NotThrow();
+
+            entityMock["shoe_size"].Should().Be(8);
         }
 
         [Fact]

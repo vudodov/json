@@ -96,7 +96,7 @@ namespace V.Udodov.Json
             if (_extensionDataJsonSchema != null)
             {
                 var obj = JObject.FromObject(_data);
-                obj.Add(key, token);
+                obj[key] = token;
 
                 if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
                     throw new JsonEntityValidationException(
@@ -104,7 +104,7 @@ namespace V.Udodov.Json
                         errors);
             }
 
-            _data.Add(key, token);
+            _data[key] = token;
         }
 
         public bool TryGetValue(string key, out object value)
