@@ -14,6 +14,16 @@ namespace V.Udodov.Json
         [JsonExtensionData] private readonly IDictionary<string, JToken> _data = new Dictionary<string, JToken>();
 
         /// <summary>
+        /// Enables auto-validation of object against JsonSchema on add attempt. 
+        /// </summary>
+        [JsonIgnore] public bool AutoValidate { get; set; }
+
+        public Entity()
+        {
+            AutoValidate = true;
+        }
+
+        /// <summary>
         /// Get Full JSON Schema including class properties and configured flexible data schema.
         /// </summary>
         [JsonIgnore]
@@ -93,15 +103,18 @@ namespace V.Udodov.Json
         {
             var token = JToken.FromObject(value);
 
-            if (_extensionDataJsonSchema != null)
+            if (AutoValidate)
             {
-                var obj = JObject.FromObject(_data);
-                obj[key] = token;
+                if (_extensionDataJsonSchema != null)
+                {
+                    var obj = JObject.FromObject(_data);
+                    obj[key] = token;
 
-                if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
-                    throw new JsonEntityValidationException(
-                        $"Validation for value {token} failed against JSON schema {_extensionDataJsonSchema}.",
-                        errors);
+                    if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
+                        throw new JsonEntityValidationException(
+                            $"Validation for value {token} failed against JSON schema {_extensionDataJsonSchema}.",
+                            errors);
+                }
             }
 
             _data[key] = token;
@@ -131,6 +144,22 @@ namespace V.Udodov.Json
 
             value = null;
             return false;
+        }
+
+        /// <summary>
+        /// Validates if current entity state is valid against JsonSchema.
+        /// </summary>
+        /// <exception cref="JsonEntityValidationException"></exception>
+        public void Validate()
+        {
+            if (_extensionDataJsonSchema == null) return;
+            
+            var obj = JObject.FromObject(_data);
+
+            if (!obj.IsValid(_extensionDataJsonSchema, out IList<ValidationError> errors))
+                throw new JsonEntityValidationException(
+                    $"Validation failed against JSON schema {_extensionDataJsonSchema}.",
+                    errors);
         }
     }
 }

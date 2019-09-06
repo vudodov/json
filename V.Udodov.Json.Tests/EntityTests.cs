@@ -203,5 +203,30 @@ namespace V.Udodov.Json.Tests
 
             result.Should().Be(12);
         }
+        
+        [Fact]
+        public void WhenSettingEntityFlexibleDataWithSchemaAndAutoValidationIsEnabledAndDataIsInvalidItShouldThrow()
+        {
+            const string schema = @"{
+              'type': 'object',
+              'properties': {
+                'shoe_size': { 'type': 'number', 'minimum': 5, 'maximum': 12, 'multipleOf': 1.0 }
+              }
+            }";
+
+            var entityMock = new EntityMock
+            {
+                AutoValidate = false,
+                ExtensionDataJsonSchema = schema
+            };
+            Action action = () => entityMock["shoe_size"] = 15;
+            Action validation = () => entityMock.Validate();
+
+            action.Should().NotThrow<JsonEntityValidationException>();
+            validation
+                .Should().Throw<JsonEntityValidationException>()
+                .And.Errors
+                .Should().HaveCount(1);
+        }
     }
 }
