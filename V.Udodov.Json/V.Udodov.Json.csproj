@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.11" />
+      <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.12-beta1" />
     </ItemGroup>
 
 </Project>
